@@ -1,0 +1,39 @@
+@model PIExemploDb.Models.Livro
+
+@{
+    ViewData["Title"] = "Novo Livro";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Create">
+    <div class="form-horizontal">
+        <h4>Livro</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Titulo" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Titulo" class="form-control" />
+                <span asp-validation-for="Titulo" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="GeneroId" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="GeneroId"
+                    class ="form-control" asp-items="ViewBag.GeneroId"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Salvar" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Voltar</a>
+</div>
+
