@@ -38,7 +38,89 @@ namespace PIExemploDb.Controllers
                 _context.Generos, "ID", "ID", livro.GeneroId);
             return View(livro);
         }
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var livro = await _context.Livros.SingleOrDefaultAsync(
+                m => m.ID == id);
+            if (livro == null)
+            {
+                return NotFound();
+            }
+            ViewData["GeneroId"] = new SelectList(_context.Generos,
+                "ID", "Nome", livro.GeneroId);
+            return View(livro);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id,
+            [Bind("ID,Titulo,GeneroId")] Livro livro)
+        {
+            if (id != livro.ID)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(livro);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_context.Livros.Any(e => e.ID == id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction("Index");
+            }
+            ViewData["GeneroId"] = new SelectList(_context.Generos,
+                "ID", "Nome", livro.GeneroId);
+            return View(livro);
+        }
+
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var livro = await _context.Livros
+                .Include(l => l.Genero)
+                .SingleOrDefaultAsync(m => m.ID == id);
+            if (livro == null)
+            {
+                return NotFound();
+            }
+
+            return View(livro);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var livro = await _context.Livros.SingleOrDefaultAsync(m => m.ID == id);
+            _context.Livros.Remove(livro);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
     }
 }
+
 
 

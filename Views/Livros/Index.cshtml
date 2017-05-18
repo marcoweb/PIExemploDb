@@ -31,10 +31,13 @@
                 @Html.DisplayFor(modelItem => item.Genero.Nome)
             </td>
             <td>
+                <a asp-action="Edit" asp-route-id="@item.ID">Editar</a>
+                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
 
+    
 
